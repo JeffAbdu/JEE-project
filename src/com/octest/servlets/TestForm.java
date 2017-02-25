@@ -3,6 +3,7 @@ package com.octest.servlets;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,24 @@ public class TestForm extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		/*  To get session from the servlet
+		HttpSession session = request.getSession(); // don't create a session, just assign the session that comes with the request
+		String prenom = (String) session.getAttribute("prenom");
+		// we can delete a session by: 
+		     session.invalidate();
+		  */   
+		
+		Cookie[] cookies = request.getCookies();
+	    
+		if(cookies != null){
+			for(Cookie cookie: cookies){
+				if(cookie.getName().equals("prenom")){
+					request.setAttribute("prenom", cookie.getValue());
+				}
+			}
+		}
+		
 		this.getServletContext().getRequestDispatcher("/WEB-INF/BonjourForm.jsp").forward(request, response);
 	}
 
@@ -32,7 +51,6 @@ public class TestForm extends HttpServlet {
 		request.setAttribute("form", form);		
 		
 		// Setting a session:
-		if ( !(request.getParameter("nom")).equals(null) && !(request.getParameter("prenom").equals(null))){
 			String nom, prenom;
 			HttpSession session = request.getSession();
 			
@@ -41,7 +59,12 @@ public class TestForm extends HttpServlet {
 		
 			prenom = request.getParameter("prenom");
 			session.setAttribute("prenom", prenom);
-		} 
+ 
+		
+		// Cookie creation:
+			Cookie cookie = new Cookie("prenom", prenom);
+			cookie.setMaxAge(60 * 60 * 24 * 30);
+            response.addCookie(cookie);
 
 		this.getServletContext().getRequestDispatcher("/WEB-INF/BonjourForm.jsp").forward(request, response);
 	}

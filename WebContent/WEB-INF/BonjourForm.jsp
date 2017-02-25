@@ -6,6 +6,8 @@
 </head>
 <body>
 
+  <p>From Cookie : </p><c:out value="${prenom}"></c:out>
+
  <c:if test="${ !empty form.resultat }"><p><c:out value="${form.resultat}"/></p></c:if> 
 
   <form method="post" action="testForm">
