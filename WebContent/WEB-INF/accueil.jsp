@@ -10,5 +10,8 @@
  
      <p>Bienvenu sure mon site !</p>
  
+ 	  <c:if test="${ !empty sessionScope.prenom && !empty sessionScope.nom }"><p>You are ${ sessionScope.prenom } ${ sessionScope.nom }</p></c:if>	
+		
+ 
     </body>
 </html>

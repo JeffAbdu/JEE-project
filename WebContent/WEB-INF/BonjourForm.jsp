@@ -19,8 +19,24 @@
       <input type="password" name="pass" id="pass"/>
      </p>
            
-      <input type="submit" value="Submit name" />
-  </form>
+     
+      
+      <hr size="2" width="2"
+			align="center" style="width: 723px; ">
+			
+	  <c:if test="${ !empty sessionScope.prenom && !empty sessionScope.nom }"><p>You are ${ sessionScope.prenom } ${ sessionScope.nom }</p></c:if>	
+			
+      <p>
+          <label for="name">Nom: </label>
+          <input type="text" name="nom" id="nom"/> 
+      </p>	
+      <p>
+          <label for="prenom">Prenom: </label>
+          <input type="text" name="prenom" id="prenom"/>         
+      </p>
+			
+		  <input type="submit"/>
+	</form>
 
 </body>
 </html>
