@@ -6,7 +6,7 @@ import com.octest.beans.User;
 
 public interface UserDao {
 
-	public void addUser();
+	public void addUser(User user);
 	
 	List<User> getUsers();
 	

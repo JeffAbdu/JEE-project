@@ -49,9 +49,8 @@ public class TestForm extends HttpServlet {
 				}
 			}
 		}
-		
-        Noms tableNoms = new Noms();    
-        request.setAttribute("users", tableNoms.getUsers());
+		    
+        request.setAttribute("users", userDao.getUsers());
 		
 		this.getServletContext().getRequestDispatcher("/WEB-INF/BonjourForm.jsp").forward(request, response);
 	}
@@ -86,10 +85,9 @@ public class TestForm extends HttpServlet {
             user.setNom(nom);
             user.setPrenom(prenom);
             
-            Noms noms = new Noms();
-            noms.addUser(user);
+            userDao.addUser(user);
              
-            request.setAttribute("users", noms.getUsers());
+            request.setAttribute("users", userDao.getUsers());
             
 		this.getServletContext().getRequestDispatcher("/WEB-INF/BonjourForm.jsp").forward(request, response);
 	}
