@@ -38,6 +38,13 @@
       </p>
 			
 		  <input type="submit"/>
+		  <p>list of the names:</p>
+		  
+		<ul>  
+		  <c:forEach var="user" items="${ users }">
+		      <li><c:out value="${ user.prenom }"/><c:out value="${ user.nom}"/></li>
+		  </c:forEach>
+		</ul>  
 	</form>
 
 </body>

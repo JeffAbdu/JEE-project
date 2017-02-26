@@ -9,15 +9,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.octest.beans.User;
+import com.octest.dao.DaoFactory;
+import com.octest.dao.UserDao;
+import com.octest.db.Noms;
 import com.octest.forms.ConnectionForm;
 
 @WebServlet("/TestForm")
 public class TestForm extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+    private UserDao userDao;
+	
 	public TestForm() {
 		super();
 	}
+	
+	public void init() throws ServletException{
+		DaoFactory doaFactory = DaoFactory.getInstance();
+	    this.userDao = doaFactory.getUserDao();  // Equivalent to: this.userDao = new UserDaoImpl(daoFactory); 
+	}
+	
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -38,6 +49,9 @@ public class TestForm extends HttpServlet {
 				}
 			}
 		}
+		
+        Noms tableNoms = new Noms();    
+        request.setAttribute("users", tableNoms.getUsers());
 		
 		this.getServletContext().getRequestDispatcher("/WEB-INF/BonjourForm.jsp").forward(request, response);
 	}
@@ -65,7 +79,18 @@ public class TestForm extends HttpServlet {
 			Cookie cookie = new Cookie("prenom", prenom);
 			cookie.setMaxAge(60 * 60 * 24 * 30);
             response.addCookie(cookie);
-
+            
+          // Add a user:
+            
+            User user = new User();
+            user.setNom(nom);
+            user.setPrenom(prenom);
+            
+            Noms noms = new Noms();
+            noms.addUser(user);
+             
+            request.setAttribute("users", noms.getUsers());
+            
 		this.getServletContext().getRequestDispatcher("/WEB-INF/BonjourForm.jsp").forward(request, response);
 	}
 
