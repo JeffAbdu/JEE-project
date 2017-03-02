@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.octest.beans.BeanException;
 import com.octest.beans.User;
+import com.octest.dao.DaoException;
 import com.octest.dao.DaoFactory;
 import com.octest.dao.UserDao;
 import com.octest.db.Noms;
@@ -50,8 +52,11 @@ public class TestForm extends HttpServlet {
 			}
 		}
 		    
-        request.setAttribute("users", userDao.getUsers());
-		
+		try{
+           request.setAttribute("users", userDao.getUsers());
+		}catch(DaoException e){
+		   request.setAttribute("error", e.getMessage());
+		}       
 		this.getServletContext().getRequestDispatcher("/WEB-INF/BonjourForm.jsp").forward(request, response);
 	}
 
@@ -80,15 +85,18 @@ public class TestForm extends HttpServlet {
             response.addCookie(cookie);
             
           // Add a user:
-            
+           try{
             User user = new User();
-            user.setNom(nom);
-            user.setPrenom(prenom);
-            
+            user.setNom(request.getParameter("nom"));
+            user.setPrenom(request.getParameter("prenom"));
             userDao.addUser(user);
-             
             request.setAttribute("users", userDao.getUsers());
-            
+           }catch(BeanException e1){
+        	   request.setAttribute("error", e1.getMessage());
+           }catch(DaoException e2){
+        	   request.setAttribute("error", e2.getMessage());
+           }
+           
 		this.getServletContext().getRequestDispatcher("/WEB-INF/BonjourForm.jsp").forward(request, response);
 	}
 

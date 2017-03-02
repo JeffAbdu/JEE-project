@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.octest.beans.BeanException;
 import com.octest.beans.User;
 
 public class UserDaoImpl implements UserDao{
@@ -17,7 +18,7 @@ public class UserDaoImpl implements UserDao{
 		this.daoFactory = daoFactory;
 	}
 
-	public void addUser(User user){
+	public void addUser(User user) throws DaoException{
 		Connection connection = null;
         PreparedStatement preparedStatement = null;
 		
@@ -27,13 +28,28 @@ public class UserDaoImpl implements UserDao{
 			preparedStatement.setString(1, user.getNom());
 			preparedStatement.setString(2, user.getPrenom());
 			preparedStatement.executeUpdate();
-		}catch(SQLException e){
-		
-		} 
-		
+			connection.commit();
+			
+		}catch(SQLException e1){
+			try{
+				if(connection != null){
+					connection.rollback();
+				}
+			}catch(SQLException e2){
+				   throw new DaoException("Connection issue with data base!");
+			}			
+		}finally{
+				try{
+					if(connection != null){
+						connection.close();
+					}
+				}catch(SQLException e){
+				   throw new DaoException("Connection issue with data base!");	
+				}
+		}
 	}
 	
-	public List<User> getUsers(){
+	public List<User> getUsers() throws DaoException{
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet result = null;
@@ -54,13 +70,16 @@ public class UserDaoImpl implements UserDao{
 			}
 	        
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 throw new DaoException("Connection issue with data base!");
+		}catch(BeanException e2){
+			 throw new DaoException(e2.getMessage());
 		}finally{
 			try{
 				if (result != null) result.close();
 				if (statement != null) statement.close();
 				if (connection != null) connection.close();				
 			}catch(SQLException ignore){	
+			   throw new DaoException("Connection issue with data base!");
 			}
 		}
 		return users;

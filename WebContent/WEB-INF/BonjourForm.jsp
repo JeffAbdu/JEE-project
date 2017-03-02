@@ -5,7 +5,7 @@
 <title>Login form</title>
 </head>
 <body>
-
+ 
   <p>From Cookie : </p><c:out value="${prenom}"></c:out>
 
  <c:if test="${ !empty form.resultat }"><p><c:out value="${form.resultat}"/></p></c:if> 
@@ -25,6 +25,8 @@
       
       <hr size="2" width="2"
 			align="center" style="width: 723px; ">
+		
+	  <c:if test="${!empty error}"><p style="color:red;"><c:out value="${error}"/></p></c:if>	
 			
 	  <c:if test="${ !empty sessionScope.prenom && !empty sessionScope.nom }"><p>You are ${ sessionScope.prenom } ${ sessionScope.nom }</p></c:if>	
 			
@@ -36,9 +38,11 @@
           <label for="prenom">Prenom: </label>
           <input type="text" name="prenom" id="prenom"/>         
       </p>
-			
-		  <input type="submit"/>
-		  <p>list of the names:</p>
+
+		
+		
+		<input type="submit" value="Add nom" />
+		<p>list of the names:</p>
 		  
 		<ul>  
 		  <c:forEach var="user" items="${ users }">
